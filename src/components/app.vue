@@ -1,0 +1,245 @@
+<template>
+  <div class="monako-container" ref="view">
+    <!-- header -->
+    <div id="header" ref="header">
+      <!-- <div class="content-blur"></div> -->
+    </div>
+    <header ref="headers">
+      <h1>
+        <router-link to="/home">Monako</router-link>
+      </h1>
+      <svg ref="ram" class="ham" viewBox="0 0 100 100" width="50" @click="openNav">
+        <path
+          class="line top"
+          d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"
+        ></path>
+        <path class="line middle" d="m 30,50 h 40"></path>
+        <path
+          class="line bottom"
+          d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"
+        ></path>
+      </svg>
+      <nav ref="nav">
+        <router-link
+         v-for="nav in nav" 
+         :key='nav.name'
+         :to="nav.to">
+          {{ nav.name }}
+         </router-link>
+      </nav>
+    </header>
+    <!-- main -->
+    <transition>
+      <router-view></router-view>
+    </transition>
+
+    <!-- blur -->
+    <svg>
+      <filter id="blur-effect">
+        <feGaussianBlur stdDeviation="20"></feGaussianBlur>
+      </filter>
+    </svg>
+    <!-- rolling -->
+    <div id="rollingBox">
+      <div id="rolling" ref="rolling"></div>
+    </div>
+    <!-- footer -->
+    <footer ref="footer">
+      <p>monako</p>
+      <article>monako</article>
+    </footer>
+  </div>
+</template>
+<script>
+import { setTimeout } from "timers";
+import { isBoolean } from 'util';
+export default {
+  data() {
+    return {
+      nav: [
+        { name: '分类', to: '/class' },
+        { name: '时间轴', to: '/timeLine' },
+        { name: '友链', to: '/friendsLink' },
+      ],
+      duplicate: null
+    };
+  },
+  mounted() {
+    this.initHeight();
+    window.addEventListener('scroll',this.scrollWheel,false);
+  },
+  methods: {
+    openNav(){
+      this.$refs.ram.classList.toggle('active');
+      this.$refs.header.classList.toggle('openHeader');
+    },
+    initHeight() {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.pageYOffset = 0;
+      let oldNode = document.getElementsByClassName("content-blur");
+      if(oldNode.length){
+        for(var i = oldNode.length - 1; i >= 0; i--) {
+          oldNode[i].parentNode.removeChild(oldNode[i]); 
+        }
+        console.log(oldNode.length)
+      }
+      setTimeout(() => {
+        let duplicate = this.$refs.view.cloneNode(true);
+        let newnode = document.createElement("div");
+        newnode.className = "content-blur";
+        newnode.appendChild(duplicate);
+        this.$refs.header.appendChild(newnode);
+      }, 50);
+    },
+    scrollWheel(){
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset;
+      let translation = "translateY(" + (-scrollTop + "px") + ")";
+      let oldNode = document.getElementsByClassName("content-blur");
+      if(oldNode.length){
+        document.getElementsByClassName(
+        "content-blur"
+        )[0].style.webkitTransform = translation;
+        document.getElementsByClassName(
+          "content-blur"
+        )[0].style.transform = translation;
+      }
+      
+    }
+  },
+  watch: {
+    $route: {
+      handler:function(val, oldVal){
+        this.$nextTick(function(){  //页面加载完成后执行
+          this.initHeight();
+        })
+      },
+      // 深度观察监听
+      deep: true
+    }
+  }
+};
+</script>
+
+<style scoped lang="scss">
+.monako-container {
+  .v-enter,
+  .v-leave-to {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(20px);
+  }
+  .v-enter-active,
+  .v-leave-active {
+    transition: all 0.5s;
+  }
+  svg {
+    display: none;
+  }
+  #header {
+    height: 70px;
+    width: 100%;
+    position: fixed;
+    overflow: hidden;
+    background: #ffffff;
+    z-index: 9;
+  }
+  header {
+    height: 70px;
+    line-height: 70px;
+    width: 100%;
+    min-width: 325px;
+    position: fixed;
+    z-index: 99;
+    justify-content: space-between;
+    box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.1);
+    h1 {
+      max-width: 50%;
+      padding: 0 20px;
+      a {
+        font-size: 22px;
+        font-weight: 300;
+        color: RGBA(233, 136, 124, 1);
+      }
+    }
+    nav {
+      cursor: pointer;
+      // transform: translateX(-20px);
+      opacity: 1;
+      transition: transform 0.4s,opacity 0.4s;
+      a {
+        display: inline;
+        font-size: 14px;
+        padding: 5px 15px;
+        border: 1px solid transparent;
+      }
+      a:hover{
+        border-color: RGBA(233, 136, 124, 1);
+        border-radius: 30px;
+        transition: all 0.4s;
+      }
+    }
+    svg {
+      display: none;
+      position: absolute;
+      right: 0px;
+      opacity: 0;
+      transition: opacity 0.4s;
+      top: 10px;
+    }
+  }
+  footer {
+    flex-direction: column;
+    p {
+      height: 70px;
+      line-height: 70px;
+      font-size: 13px;
+      color: #5f5f5f;
+      width: 100%;
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    }
+    article {
+      padding: 50px 20px;
+    }
+  }
+  @media (max-width: 580px) {
+    #header{
+      shape-outside: polygon(0 0, 100% 0, 100% 100%, calc(100% - 70px) 100%, calc(100% - 100px) 70px, 0 70px);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 100px) 100%, calc(100% - 100px) 70px, 0 70px);
+      -webkit-shape-outside: polygon(0 0, 100% 0, 100% 100%, calc(100% - 70px) 100%, calc(100% - 100px) 70px, 0 70px);
+      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 100px) 100%, calc(100% - 100px) 70px, 0 70px);
+      transition: height 0.3s;
+      box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.1);
+    }
+    header {
+      svg {
+        display: inline;
+        opacity: 1;
+        z-index: 999;
+        transition: opacity 0.4s;
+      }
+      nav {
+        text-align: center;
+        opacity: 0;
+        transform: translateY(-15px);
+        transition: all 0.4s;
+        margin: 10px 10px 0 10px;
+        a{
+          display: block;
+          line-height: 20px;
+          transition: all 0.4s;
+        }
+      }
+      .ham.active+nav{
+        opacity: 1;
+        transform: translateY(85px);
+      }
+    }
+    .openHeader{
+      height: 180px!important;
+    }
+  }
+}
+</style>
