@@ -46,8 +46,6 @@
   </div>
 </template>
 <script>
-import { setTimeout } from "timers";
-import { isBoolean } from 'util';
 export default {
   data() {
     return {

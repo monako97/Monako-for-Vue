@@ -76,28 +76,27 @@ export default {
       width: auto;
       height: auto;
       opacity: 0;
-      filter: blur(30px);
+      filter: blur(25px);
       transition: opacity 0.5s;
     }
   }
   article {
-    margin: 80px auto 70px;
+    margin: 100px auto 70px;
     max-width: 1000px;
     .header-anchor{
       color: rgba(176, 139, 227, 0.5);
     }
     .table-of-contents{
-      max-width: 200px;
+      max-width: 350px;
       position: fixed;
       right: 0;
-      top: 80px;
-      margin: auto;
+      margin: 110px auto 0;
       border-bottom-left-radius: 8px;
       background: rgba(255, 255, 255, 0.9);
       box-shadow: 0 0 10px 10px #58526015;
       padding: 10px; 
-      transform: translateX(calc(100% - 10px));
-      transition: transform 0.3s ease-in;
+      transform: translateX(0);
+      transition: all 0.5s ease-in;
       border-left: 10px solid rgba(233, 136, 124, 1);
       ol{
         li{
@@ -114,9 +113,6 @@ export default {
     }
     a:hover,ol li a:hover{
         color: rgba(233, 136, 124, 1);
-    }
-    .table-of-contents:hover{
-      transform: translateX(0);
     }
     sup{
       background: rgba(121, 206, 237, 0.8);
@@ -409,7 +405,7 @@ export default {
       border-radius: 8px;
     }
     table tr:hover {
-      background: #fbf8e9;
+      background: #fbf8e9e5;
       -o-transition: all 0.1s ease-in-out;
       -webkit-transition: all 0.1s ease-in-out;
       -moz-transition: all 0.1s ease-in-out;
@@ -421,13 +417,11 @@ export default {
       border-left: 1px solid rgba(233, 137, 124, 0.8);
       border-top: 1px solid rgba(233, 137, 124, 0.8);
       padding: 10px;
-      text-align: left;
     }
     table th {
       background-color: #E9887C;
-      // border: none;
-      border-left: #fff;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+      border: none;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
       padding: 10px;
       color: #fff;
     }
@@ -528,24 +522,31 @@ export default {
       font-weight: bold;
     }
   }
-  @media (max-width: 1000px) {
+  @media (max-width: 1110px) {
     article {
-      margin: 80px;
+      margin: 100px 55px;
+      .table-of-contents{
+        transform: translateX(calc(100% - 10px));
+        transition: transform 0.3s ease-in;
+      }
+      .table-of-contents:hover{
+        transform: translateX(0);
+      }
     }
   }
   @media (max-width: 880px) {
     article {
-      margin: 80px 55px;
+      margin: 100px 55px;
     }
   }
   @media (max-width: 700px) {
     article {
-      margin: 80px 40px;
+      margin: 100px 55px;
     }
   }
   @media (max-width: 580px) {
     article {
-      margin: 80px 20px;
+      margin: 100px 20px;
     }
   }
 }

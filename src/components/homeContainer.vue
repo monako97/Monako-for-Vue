@@ -1,13 +1,18 @@
 <template>
   <transition-group appear tag="main" class="home-container">
-    <router-link tag="article" :to="'/detail/'+item.id+'?bg='+item.image" v-for="item in item" :key="item.id">
-      <div class="bgimg" :style='"background-image: url("+item.image+");"'></div>
+    <article v-for="item in item" :key="item.id">
+      <router-link tag="div" class="bgimg" 
+        :to="'/detail/'+item.id+'?bg='+item.image" 
+        :style='"background-image: url("+item.image+");"'>
+      </router-link>
       <p class="title">{{ item.name }}</p>
       <time>{{ item.time }}</time>
       <hr>
       <aside>{{ item.cons }}</aside>
-      <div class="btnReading">Continue Reading →</div>
-    </router-link>
+      <router-link tag="div"
+        :to="'/detail/'+item.id+'?bg='+item.image" 
+        class="btnReading">Continue Reading →</router-link>
+    </article>
   </transition-group>
 </template>
 <script>
@@ -89,7 +94,7 @@ export default {
       min-height: 260px;
       background-size: cover;
       background-repeat: no-repeat;
-      background-position: center;
+      background-position: top center;
       border-radius: 8px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
       transition: all 0.3s ease;

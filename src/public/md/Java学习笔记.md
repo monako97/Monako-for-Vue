@@ -29,8 +29,6 @@ $ java HelloWorld
 ```
 ![HelloWorld](https://i.loli.net/2019/06/10/5cfe736c1914074988.png "HelloWorld")
 
-___
-
 ## 标识符
 
 * __标识符__：指在程序中，我们自定义的内容，比如 class 名
@@ -45,7 +43,6 @@ ___
   + 变量名：首字母小写<sup>小驼峰式</sup>
   + 方法名：同变量名
 
-___
 
 ## 常量<sup>运行期间，固定不变的量</sup>
 
