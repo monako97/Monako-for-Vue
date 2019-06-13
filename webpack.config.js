@@ -59,6 +59,10 @@ module.exports = {
                 use: 'vue-loader'
             },
             {
+                test: /\.md$/,
+                use: [{ loader: 'text-loader' }]
+            },
+            {
                 test:/\.(sa|sc|c)ss$/,
                 use: [
                   process.env.NODE_ENV === 'development' ? 'style-loader': MiniCssExtractPlugin.loader,

@@ -2891,7 +2891,7 @@
                 for (var e in t) at[e] = t[e], i
             }, at.init = function () {
                 if (at._$6b) {
-                    console.log("Live2D %s", at._$2s), at._$6b = !1;
+                    at._$6b = !1;
                     !0, at.initProfile()
                 }
             }, at.getVersionStr = function () {

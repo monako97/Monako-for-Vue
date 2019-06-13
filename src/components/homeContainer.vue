@@ -1,13 +1,13 @@
 <template>
   <transition-group appear tag="main" class="home-container">
-    <article v-for="item in item" :key="item.id">
+    <router-link tag="article" :to="'/detail/'+item.id+'?bg='+item.image" v-for="item in item" :key="item.id">
       <div class="bgimg" :style='"background-image: url("+item.image+");"'></div>
       <p class="title">{{ item.name }}</p>
       <time>{{ item.time }}</time>
       <hr>
       <aside>{{ item.cons }}</aside>
       <div class="btnReading">Continue Reading →</div>
-    </article>
+    </router-link>
   </transition-group>
 </template>
 <script>
@@ -17,18 +17,16 @@ export default {
       item: [
         {
           id: 1,
-          name: "MacOS使用Docker编译OpenWrt固件",
+          name: "第一个java程序",
           time: "Published on Oct 15, 2018 in",
-          cons:
-            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
-          image: "https://i.loli.net/2018/09/26/5bab2f0cdff5f.jpg"
+          cons: "阁下要来一杯提升醒脑的java吗？",
+          image: "https://i.loli.net/2019/06/13/5d0234ce0f49d94264.jpg"
         },
         {
           id: 2,
-          name: "MacOS使用Docker编译OpenWrt固件",
+          name: "[flutter]iCloudMusic音乐播放器",
           time: "Published on Oct 15, 2018 in",
-          cons:
-            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
+          cons: "来使用flutter的Cupertino组件编写一个网易云音乐吧",
           image: "https://i.loli.net/2018/09/26/5bab2f0cdff5f.jpg"
         },
         {
@@ -37,15 +35,15 @@ export default {
           time: "Published on Oct 15, 2018 in",
           cons:
             "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
-          image: "https://i.loli.net/2018/09/26/5bab2f0cdff5f.jpg"
+          image: "https://i.loli.net/2019/06/13/5d02473b9253252029.jpg"
         },
         {
           id: 4,
           name: "MacOS使用Docker编译OpenWrt固件",
           time: "Published on Oct 15, 2018 in",
-          cons:
+          cons: 
             "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
-          image: "https://i.loli.net/2018/09/26/5bab2f0cdff5f.jpg"
+          image: "https://i.loli.net/2019/06/13/5d0242cae595684066.png"
         },
         {
           id: 5,
@@ -53,7 +51,15 @@ export default {
           time: "Published on Oct 15, 2018 in",
           cons:
             "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
-          image: "https://i.loli.net/2018/09/26/5bab2f0cdff5f.jpg"
+          image: "https://i.loli.net/2019/06/13/5d02468d7cbaf92589.jpg"
+        },
+        {
+          id: 6,
+          name: "MacOS使用Docker编译OpenWrt固件",
+          time: "Published on Oct 15, 2018 in",
+          cons:
+            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
+          image: "https://i.loli.net/2019/06/13/5d0247c149c6c98148.jpg"
         }
       ]
     };
@@ -86,10 +92,15 @@ export default {
       background-position: center;
       border-radius: 8px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+      -webkit-transition: all 0.3s ease;
+      -moz-transition: all 0.3s ease;
+      -o-transition: all 0.3s ease;
     }
     .bgimg:hover {
-      box-shadow: 2px 3px 4px RGBA(204, 171, 218, 0.5);
-      transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+      box-shadow: 0 26px 40px -20px rgba(204, 171, 218, 0.5);
+      -webkit-box-shadow: 0 26px 40px -20px rgba(204, 171, 218, 0.5);
+      -moz-box-shadow: 0 26px 40px -20px rgba(204, 171, 218, 0.5);
     }
     .title {
       font-size: 21px;

@@ -20,8 +20,6 @@ Vue.http.options.emulateJSON = true;
 
 // 导入自己的 router.js 模块
 import router from "../router/router";
-// 导入 live2d 模块
-// import "../js/live2d";
 
 // 导入 common.css
 import "../style/common.scss";

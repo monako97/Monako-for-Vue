@@ -1,9 +1,6 @@
 <template>
   <div class="monako-container" ref="view">
     <!-- header -->
-    <div id="header" ref="header">
-      <!-- <div class="content-blur"></div> -->
-    </div>
     <header ref="headers">
       <h1>
         <router-link to="/home">Monako</router-link>
@@ -28,21 +25,19 @@
          </router-link>
       </nav>
     </header>
+    
     <!-- main -->
     <transition>
       <router-view></router-view>
     </transition>
-
+    
     <!-- blur -->
     <svg>
       <filter id="blur-effect">
         <feGaussianBlur stdDeviation="20"></feGaussianBlur>
       </filter>
     </svg>
-    <!-- rolling -->
-    <div id="rollingBox">
-      <div id="rolling" ref="rolling"></div>
-    </div>
+    <div id="header" ref="header"></div>
     <!-- footer -->
     <footer ref="footer">
       <p>monako</p>
@@ -61,19 +56,46 @@ export default {
         { name: '时间轴', to: '/timeLine' },
         { name: '友链', to: '/friendsLink' },
       ],
+      scrollTop: 0,
+      maxScrll: 0,
       duplicate: null
     };
   },
   mounted() {
+    let _self = this;
     this.initHeight();
     window.addEventListener('scroll',this.scrollWheel,false);
+    window.addEventListener('mousewheel',function(event){
+      event = event || window.event;
+      if(_self.maxScrll - _self.scrollTop < 70){
+        if(_self.$refs.header.style.top != '0px'||_self.$refs.headers.style.top != '0px'){
+           _self.$refs.header.style.top = '0px';
+            _self.$refs.headers.style.top = '0px';
+        }
+      }else{
+        if(event.deltaY>10){
+          if(_self.$refs.header.style.top != '-70px'||_self.$refs.headers.style.top != '-70px'){
+            _self.$refs.header.style.top = '-70px';
+            _self.$refs.headers.style.top = '-70px';
+          }
+        }else if(event.deltaY<0){
+          if(_self.$refs.header.style.top != '0px'||_self.$refs.headers.style.top != '0px'){
+            _self.$refs.header.style.top = '0px';
+            _self.$refs.headers.style.top = '0px';
+          }
+        };
+      }
+    },false);
   },
   methods: {
-    openNav(){
+    openNav(){ // 打开nav菜单
       this.$refs.ram.classList.toggle('active');
       this.$refs.header.classList.toggle('openHeader');
     },
     initHeight() {
+      this.$refs.header.style.top = '0px';
+            this.$refs.headers.style.top = '0px';
+      this.maxScrll = document.body.scrollHeight - document.documentElement.clientHeight;
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       window.pageYOffset = 0;
@@ -82,7 +104,6 @@ export default {
         for(var i = oldNode.length - 1; i >= 0; i--) {
           oldNode[i].parentNode.removeChild(oldNode[i]); 
         }
-        console.log(oldNode.length)
       }
       setTimeout(() => {
         let duplicate = this.$refs.view.cloneNode(true);
@@ -90,12 +111,13 @@ export default {
         newnode.className = "content-blur";
         newnode.appendChild(duplicate);
         this.$refs.header.appendChild(newnode);
-      }, 50);
+      }, 100);
     },
     scrollWheel(){
-      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset;
-      let translation = "translateY(" + (-scrollTop + "px") + ")";
+      this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset;
+      let translation = "translateY(" + (-this.scrollTop + "px") + ")";
       let oldNode = document.getElementsByClassName("content-blur");
+      this.maxScrll = document.body.scrollHeight - document.documentElement.clientHeight;
       if(oldNode.length){
         document.getElementsByClassName(
         "content-blur"
@@ -144,7 +166,9 @@ export default {
     position: fixed;
     overflow: hidden;
     background: #ffffff;
+    top: 0;
     z-index: 9;
+    transition: top 0.5s ease;
   }
   header {
     height: 70px;
@@ -154,19 +178,19 @@ export default {
     position: fixed;
     z-index: 99;
     justify-content: space-between;
-    box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    transition: top 0.5s ease;
     h1 {
       max-width: 50%;
       padding: 0 20px;
       a {
         font-size: 22px;
         font-weight: 300;
-        color: RGBA(233, 136, 124, 1);
+        color: rgba(233, 136, 124, 1);
       }
     }
     nav {
       cursor: pointer;
-      // transform: translateX(-20px);
       opacity: 1;
       transition: transform 0.4s,opacity 0.4s;
       a {
@@ -176,7 +200,7 @@ export default {
         border: 1px solid transparent;
       }
       a:hover{
-        border-color: RGBA(233, 136, 124, 1);
+        border-color: rgba(233, 136, 124, 1);
         border-radius: 30px;
         transition: all 0.4s;
       }
@@ -192,6 +216,7 @@ export default {
   }
   footer {
     flex-direction: column;
+    background: rgba(255, 255, 255, 0.5);
     p {
       height: 70px;
       line-height: 70px;
@@ -210,7 +235,7 @@ export default {
       clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 100px) 100%, calc(100% - 100px) 70px, 0 70px);
       -webkit-shape-outside: polygon(0 0, 100% 0, 100% 100%, calc(100% - 70px) 100%, calc(100% - 100px) 70px, 0 70px);
       -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 100px) 100%, calc(100% - 100px) 70px, 0 70px);
-      transition: height 0.3s;
+      transition: height 0.3s,top 0.5s;
       box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.1);
     }
     header {

@@ -14,7 +14,7 @@ var router = new VueRouter({
         { path: "/class", component: ClassIfication },
         { path: "/friendsLink", component: FriendsLink },
         { path: "/timeLine", component: TimeLine },
-        { path: "/detail", component: DetailContainer }
+        { path: "/detail/:id", component: DetailContainer }
     ],
     linkActiveClass: "router-link-active" // 默认的类 router-link-active
 });
