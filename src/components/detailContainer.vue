@@ -6,10 +6,11 @@
     <article v-html="this.readme"></article>
   </main>
 </template>
-
 <script>
-import markdownItAnchor from "markdown-it-anchor";
-import markdownItTocDoneRight from "markdown-it-toc-done-right";
+import markdownItAnchor from 'markdown-it-anchor';
+import markdownItTocDoneRight from 'markdown-it-toc-done-right';
+import markdownItSup from 'markdown-it-sup';
+import markdownItMark from 'markdown-it-mark';
 export default {
   data() {
     return {
@@ -40,10 +41,12 @@ export default {
           );
         }
       })
+      .use(markdownItSup)
+      .use(markdownItMark)
       .use(markdownItAnchor,{
         permalink: true,
         permalinkBefore: true, 
-        permalinkSymbol: '§',
+        permalinkSymbol: '#',
       })
       .use(markdownItTocDoneRight)
       .render(readme);
@@ -88,9 +91,11 @@ export default {
     }
     .table-of-contents{
       max-width: 350px;
+      max-height: 60%;
+      overflow-y: auto;
       position: fixed;
       right: 0;
-      margin: 110px auto 0;
+      margin: 90px auto 0;
       border-bottom-left-radius: 8px;
       background: rgba(255, 255, 255, 0.9);
       box-shadow: 0 0 10px 10px #58526015;
@@ -114,13 +119,12 @@ export default {
     a:hover,ol li a:hover{
         color: rgba(233, 136, 124, 1);
     }
-    sup{
-      background: rgba(121, 206, 237, 0.8);
-      color: #fff;
-      font-size: 12px;
+    mark{
       padding: 2px 4px;
+      font-size: 90%;
+      color: #E9887C;
+      background-color: #f9f2f4;
       border-radius: 4px;
-      cursor: pointer;
     }
     p{
       img{
@@ -133,7 +137,7 @@ export default {
     
     h1,h2,h3,h4 {
       color: #111111;
-      font-weight: 400;
+      font-weight: 500;
       margin-top: 1em;
     }
     h1,h2,h3,h4,h5,p,dl {
@@ -141,11 +145,11 @@ export default {
       padding: 0;
     }
     h1 {
-      font-size: 48px;
+      font-size: 1.6em;
       line-height: 54px;
     }
     h2 {
-      font-size: 36px;
+      font-size: 1.5em;
       line-height: 42px;
     }
     h1,h2 {
@@ -153,26 +157,22 @@ export default {
       padding-bottom: 10px;
     }
     h3 {
-      font-size: 24px;
+      font-size: 1.4em;
       line-height: 30px;
     }
     h4 {
-      font-size: 21px;
+      font-size: 1.3em;
       line-height: 26px;
     }
     h5 {
-      font-size: 18px;
+      font-size: 1.2em;
       list-style: 23px;
     }
     
-    ul,ol {
+    ol {
       padding: 0;
       padding-left: 24px;
       margin: 0;
-    }
-    li {
-      line-height: 24px;
-      list-style: inherit;
     }
     p,ul,ol {
       font-size: 14px;
@@ -180,12 +180,13 @@ export default {
 
     pre {
       line-height: 1.7em;
-      overflow: auto;
+      overflow-x: auto;
       padding: 6px 10px;
       border-left: 5px solid rgba(233, 136, 124, 1);
     }
 
     pre > code {
+      color: #585260;
       border: 0;
       display: inline;
       max-width: initial;
@@ -399,13 +400,14 @@ export default {
     table {
       border-spacing: 0;
       width: 100%;
-      border: solid rgba(233, 137, 124, 0.8) 1px;
-      -moz-border-radius: 8px;
-      -webkit-border-radius: 8px;
-      border-radius: 8px;
+      border: solid rgba(233, 137, 124, 0.5) 0.5px;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+      overflow: hidden;
     }
     table tr:hover {
-      background: #fbf8e9e5;
+      background: #fbf8e9c5;
       -o-transition: all 0.1s ease-in-out;
       -webkit-transition: all 0.1s ease-in-out;
       -moz-transition: all 0.1s ease-in-out;
@@ -414,14 +416,11 @@ export default {
     }
     table td,
     .table th {
-      border-left: 1px solid rgba(233, 137, 124, 0.8);
-      border-top: 1px solid rgba(233, 137, 124, 0.8);
+      border-left: solid rgba(233, 137, 124, 0.3) 0.1px;
       padding: 10px;
     }
     table th {
-      background-color: #E9887C;
-      border: none;
-      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+      background-color: rgba(233, 137, 124, 1);
       padding: 10px;
       color: #fff;
     }
@@ -429,32 +428,6 @@ export default {
     table td:first-child,
     table th:first-child {
       border-left: none;
-    }
-
-    table th:first-child {
-      -moz-border-radius: 6px 0 0 0;
-      -webkit-border-radius: 6px 0 0 0;
-      border-radius: 6px 0 0 0;
-    }
-    table th:last-child {
-      -moz-border-radius: 0 6px 0 0;
-      -webkit-border-radius: 0 6px 0 0;
-      border-radius: 0 6px 0 0;
-    }
-    table th:only-child {
-      -moz-border-radius: 6px 6px 0 0;
-      -webkit-border-radius: 6px 6px 0 0;
-      border-radius: 6px 6px 0 0;
-    }
-    table tr:last-child td:first-child {
-      -moz-border-radius: 0 0 0 6px;
-      -webkit-border-radius: 0 0 0 6px;
-      border-radius: 0 0 0 6px;
-    }
-    table tr:last-child td:last-child {
-      -moz-border-radius: 0 0 6px 0;
-      -webkit-border-radius: 0 0 6px 0;
-      border-radius: 0 0 6px 0;
     }
     .hljs-comment,
     .hljs-quote {
@@ -509,11 +482,14 @@ export default {
     }
     .hljs {
       display: block;
-      overflow-x: auto;
-      background: #efecf4;
+      overflow: auto;
+      background: #f7f7f7;
       color: #585260;
       padding: 0.6em;
-      border-radius: 4px;
+    }
+    .hljs::-webkit-scrollbar{
+      height: 8px;
+      display: block;
     }
     .hljs-emphasis {
       font-style: italic;

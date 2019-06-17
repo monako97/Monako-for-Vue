@@ -30,7 +30,7 @@
     <transition>
       <router-view></router-view>
     </transition>
-    
+    <button id="settop">100</button>
     <!-- blur -->
     <svg>
       <filter id="blur-effect">
@@ -38,6 +38,8 @@
       </filter>
     </svg>
     <div id="header" ref="header"></div>
+    <!-- live2d -->
+    <canvas id="live2d" width="280" height="250"></canvas>
     <!-- footer -->
     <footer ref="footer">
       <p>monako</p>
@@ -60,6 +62,7 @@ export default {
     };
   },
   mounted() {
+    loadlive2d("live2d", "../public/live2d/Pio/index.json");
     let _self = this;
     this.initHeight();
     window.addEventListener('scroll',this.scrollWheel,false);
@@ -142,6 +145,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$height-color: rgba(233, 136, 124, 1);
 .monako-container {
   .v-enter,
   .v-leave-to {
@@ -157,6 +161,15 @@ export default {
   }
   svg {
     display: none;
+  }
+  #settop{
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    background: transparent;
+    color: $height-color;
+    border: none;
+    border-radius: 50px;
   }
   #header {
     height: 70px;
@@ -184,7 +197,7 @@ export default {
       a {
         font-size: 22px;
         font-weight: 300;
-        color: rgba(233, 136, 124, 1);
+        color: $height-color;
       }
     }
     nav {
@@ -198,7 +211,7 @@ export default {
         border: 1px solid transparent;
       }
       a:hover{
-        border-color: rgba(233, 136, 124, 1);
+        border-color: $height-color;
         border-radius: 30px;
         transition: all 0.4s;
       }
@@ -228,6 +241,12 @@ export default {
     }
   }
   @media (max-width: 580px) {
+    #settop{
+      display: none;
+    }
+    #live2d{
+      width: 150px;
+    }
     #header{
       shape-outside: polygon(0 0, 100% 0, 100% 100%, calc(100% - 70px) 100%, calc(100% - 100px) 70px, 0 70px);
       clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 100px) 100%, calc(100% - 100px) 70px, 0 70px);

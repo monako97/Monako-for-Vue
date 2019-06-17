@@ -8,8 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
     entry:{
-        monako: ['./src/js/monako.js'],
-        live2d: ['./src/js/live2d.js']
+        monako: ['./src/js/monako.js']
     },
     output: {
         path: path.resolve(__dirname,'dist'),
