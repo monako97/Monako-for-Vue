@@ -18,7 +18,7 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'dist'),
         openPage: 'html/monako.html', //指定第一次打开的路径
         host:'localhost',
-        port:8090,
+        port:8099,
         inline: true,//设置为true，当源文件改变时会自动刷新页面
     },
     plugins: [
