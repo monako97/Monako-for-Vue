@@ -39,7 +39,8 @@
     </svg>
     <div id="header" ref="header"></div>
     <!-- live2d -->
-    <canvas id="live2d" width="280" height="250"></canvas>
+    <!-- <canvas id="live2d" width="280" height="250"></canvas> -->
+    <canvas id="live2d" width="200" height="370"></canvas>
     <!-- footer -->
     <footer ref="footer">
       <p>monako</p>
@@ -62,7 +63,7 @@ export default {
     };
   },
   mounted() {
-    loadlive2d("live2d", "../public/live2d/Pio/index.json");
+    loadlive2d("live2d", "../public/live2d/aoba/model.json");
     let _self = this;
     this.initHeight();
     window.addEventListener('scroll',this.scrollWheel,false);

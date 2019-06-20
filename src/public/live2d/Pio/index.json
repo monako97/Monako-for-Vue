@@ -2,7 +2,7 @@
 	"version":"1.0.0",
 	"model":"model.moc",
     "textures":[
-        "textures/frill-bikini-costume-green.png"
+        "textures/party-dress-costume-purple.png"
     ],
     "layout":{
 		"center_x":0.0,
