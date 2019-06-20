@@ -7,7 +7,6 @@
   "author": "Monako <meow.monako@gmail.com>",
   "scripts": {
     "dev": "webpack-dev-server --open --mode development",
-    "run": "webpack-dev-server --mode development",
     "dis": "webpack --mode production"
   },
   "keywords": [
