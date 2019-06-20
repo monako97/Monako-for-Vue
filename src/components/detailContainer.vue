@@ -95,7 +95,7 @@ export default {
       overflow-y: auto;
       position: fixed;
       right: 0;
-      margin: 90px auto 0;
+      // margin: 90px auto 0;
       border-bottom-left-radius: 8px;
       background: rgba(255, 255, 255, 0.9);
       box-shadow: 0 0 10px 10px #58526015;

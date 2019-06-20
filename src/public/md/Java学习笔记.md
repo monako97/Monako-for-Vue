@@ -1,5 +1,6 @@
 [TOC]
 # Java基础笔记
+
 ## 第一个 HelloWorld 程序
 __新建 HelloWorld.java 文件：__ class 名必须与所在的 .java 文件名完全一致，class 是 java 中所有源代码的基本组织单位
 
@@ -143,7 +144,7 @@ System.out.println(num);
 ```
 
 * __解释：__
-   1. __修饰符：__ public static
+   1. __修饰符：__ public static ==静态==
    2. __返回值类型：__ 用于限定返回值的数据类型；==没有返回值时需要用 void 声明==
    3. __方法名：__ 为我们定义的方法起名，满足标识符的规范
 * __方法重载：__ ==在同一个类中，出现了方法名相同的情况，与返回值无关==
@@ -257,6 +258,14 @@ while (true){
 ...
 ```
 
+## System
+
+* __System：__ 包含一些有用的类字段和方法，它不能被实例化
+  1. __static void arraycopy(Object src,int srcPos,Object dest, int length)__
+  2. __static long currentTimeMillis()__ // 以毫秒值返回当前的系统时间
+  3. __static void exit(int status)__ // 终止虚拟机
+  4. __static void gc()__ // 运行垃圾回收器
+
 ## String类基本功能
 
 > Object：是类层次结构中的根类，所有的类都都继承自该类，如果一个方法的形式参数是Object，那么这里我们就可以传递他的任意子类对象
@@ -365,10 +374,42 @@ System.out.println("反转："+stringBuilder.reverse()); // 反转：iopokanoM
 System.out.println("再反转："+stringBuilder.reverse().reverse()); // 反转：Monakopoi
 ```
 
+## Map
+
+* __添加：__ __V put(K key,V value)__
+* __获取：__ 
+  1. __V get(Object key)__
+  2. __Int size()__
+* __删除：__ 
+  1. __void clean()__ ==清空所有==
+  2. __V remove(Object key)__
+* __判断：__ 
+  1. __boolean containsKey(Object key)__ ==key是否存在==
+  2. __boolean containsValue(Object value)__ ==value是否存在==
+  3. __boolean isEmpty()__ ==判断是否有对应关系==
+* __遍历：__
+  1. __Set<Map.Entry<K,V>> entrySet()__
+  2. __Set<K\> KeySet()__ ==返回所有key==
+  3. __Collection<V\> values()__ ==返回value==
+
+```java
+Map<String,String> map = new HashMap<String, String>();
+map.put("001","张三"); map.put("002","我三");
+Set<String> sk = map.keySet();
+for (String k: sk) { 
+  System.out.println(map.get(k)); 
+}
+// 或
+Set<Map.Entry<String,String>> ens = map.entrySet();
+for (Map.Entry<String,String> ens: entrys){ 
+  System.out.println(ens.getKey()+ens.getValue()); 
+}
+```
+
 ## 数组
 
 * __定义格式：__
-  1. 数据类型[] 数组名;（推荐）
+  1. 数据类型[] 数组名; ==推荐==
   2. 数据类型 数组名[];
 
 ```java
@@ -440,10 +481,11 @@ for (int i = 0;i < arr2.length; i++){
 
 ## 集合类
 
+### ArrayList\<E\>
+
 ==长度可变==
 
-* ArrayList\<E\>： ==\<E\> 是一种特殊的数据类型，泛型==
-  1. 大小可变数组的实现
+* __ArrayList\<E\>__： ==\<E\> 是一种特殊的数据类型，泛型，大小可变数组的实现==
 
 > 使用：在出现\<E\>的地方使用引用类型替换即可
 >
@@ -452,4 +494,382 @@ for (int i = 0;i < arr2.length; i++){
 * __构造方法：__ ArrayList()
 * __添加元素：__ 
   1.  public boolean add(E e) ==添加元素==
-  2.  public void add(int index,E element) ==在指定位置添加元素==
+  2.  public void add(int index,E element) ==在指定位置添加元素== 
+* __获取元素：__ public E get(int index) ==返回指定索引处的元素==
+* __集合长度：__ public int size() ==返回集合中的元素个数==
+* __移除元素：__ 
+  1. public boolean remove(Object o) ==移除指定元素，返回移除是否成功==
+  2. public E remove(int index) ==移除指定索引处的元素，返回移除的元素==
+* __修改元素：__ public E set(int index,E element)
+* __清空集合：__ void clear()
+* __判断包含元素：__ boolean contains(Object o)
+* __是否为空：__ boolean isEmpty()
+* __转换为Object数组：__ Object[] toArray()
+
+* __集合遍历：__ 1、toArray()     2、iterator() ==返回一个迭代器对象==
+
+  ```java
+  // Iterator: 对 collection 进行迭代的迭代器
+  Collection al = new ArrayList();
+  al.add("hello");
+  al.add("java");
+  Iterator s = al.iterator();
+  // boolean hasNext() 判断是否有元素可以获取
+  // E next(); 返回下一个元素
+  while (s.hasNext()){
+    System.out.println(s.next());
+  }
+  ```
+
+### 并发修改异常
+
+==Exception in thread "main" java.util.ConcurrentModificationException==
+
+> 迭代器是依赖于集合的，相当于集合的一个副本，当迭代器在操作时，如果发现和集合不一样，则抛出异常
+* __解决方法：__
+  1. 别用了
+  2. 使用迭代器遍历的时候使用迭代器进行修改 ==ListIterator==
+
+```java
+public class IteratorDemo {
+    public static void main(String[] args) {
+        // Collection collection = new ArrayList();
+        // collection.add("Hello");
+        // collection.add("world");
+        // collection.add("java");
+        // 获取集合的没哟个元素，比较
+        // Iterator ls = collection.iterator();
+        List  collection = new ArrayList();
+        collection.add("Hello");
+        collection.add("world");
+        collection.add("java");
+        // 获取集合的没哟个元素，比较
+        ListIterator ls = collection.listIterator();
+        while (ls.hasNext()){
+           if (ls.next().equals("java")){
+               ls.add("android");
+           }
+        }
+        System.out.println(collection.toString());
+    }
+}
+```
+
+## 泛型
+
+* __好处：__
+  1. 避免类型转换的问题
+  2. 可以减少黄色警告线
+  3. 可以简化代码书写
+
+* __森么时候用呢？__ ==<E\>==
+
+```java
+public class GenericDemo {
+    public static void main(String[] args) {
+        Collection<Study> c = new ArrayList<Study>();
+        Study study = new Study("张三",18);
+        Study study1 = new Study("张三",18);
+        c.add(study);
+        c.add(study1);
+        Iterator<Study> ls = c.iterator();
+        while (ls.hasNext()){
+            System.out.println(ls.next().name);
+        }
+    }
+}
+class Study{
+    String name;
+    int age;
+    public Study(String name,int age){
+        this.age = age;
+        this.name = name;
+    }
+}
+```
+
+## HasSet<E\>
+
+==存储自定义对象集合==
+
+```java
+Set<String> set = new HashSet<String>(); // 接口指向子类对象
+// 添加元素对象
+set.add("添加HasSet");
+set.add("添加java");
+for (String s:set) {
+	System.out.println(s);
+}
+```
+
+## Collections
+
+==Collections和Collections的区别==
+
+> __Collections：__ 是一个工具类，方法就是用于操作Collection
+>
+> __Collection：__ 集合体系的最顶层，包含了集合体系的共性
+
+* __方法：__
+  1. __static int binarySearch(List list,T key)：__ 使用二分查找法查找指定元素在指定列表的索引位置
+  2. __static void fill(List list,Object obj)：__ 使用指定的元素填充指定列表的所有元素
+  3. __static void copy(List list,Object key)：__ 把原列表中的数据覆盖到目标列表去 ==目标列表长度至少等于原列表长度==
+  4. __static void reverse(List list)：__ 反转
+  5. __static void shuffle(List list)：__ 随机置换
+  6. __static void sort(List<E\> list)：__ 按照列表中元素的自然顺序进行排序
+  7. __static void swap(list list,int i,int j)：__ 将指定列表中的两个索引进行位置互换
+```java
+List<String> list1 = new ArrayList<String>();
+list1.add("SA");
+list1.add("AA");
+Collections.reverse(list1);
+System.out.println(list1); // [AA, SA]
+// static int binarySearch(List list,T key) 使用二分查找法查找指定元素在指定列表的索引位置
+System.out.println(Collections.binarySearch(list1,"SA")); // 0
+// static void fill(List list,Object obj) 使用指定的元素填充指定列表的所有元素
+Collections.fill(list1,"撒");
+System.out.println(list1); // [撒, 撒]
+// static void copy(List list,Object key) 把原列表中的数据覆盖到目标列表去 ==目标列表长度至少等于原列表长度==
+List<String> list = new ArrayList<String>();
+list.add("");list.add("");
+Collections.copy(list,list1);
+System.out.println(list); // [撒, 撒]
+```
+
+## IO流
+
+### File
+
+* __构造方法：__
+  1. __File(String pathname)：__ 将指定的文件路径转换成一个File对象
+  2. __File(String parent,String child)：__ 根据指定的父路径和文件路径创建File对象
+  3. __File(File parent,String child)：__ 根据指定的父路径对象和文件路径创建File对象
+
+* __常用功能：__
+  1. __创建：__ 
+     1. __boolean createNewFile()__ ==创建文件==
+     2. __boolean mkdir()__ ==创建一个文件夹==
+     3. __boolean mkdirs()__ ==创建多个文件夹==
+  2. __删除：__
+     1. __boolean delete()__
+  3. __获取：__
+     1. __File getAbsoluteFile()__ ==绝对路径对象==
+     2. __String getAbsoultePath()__ ==绝对路径字符串==
+     3. __String getName()__ ==file对象的文件或目录名称==
+     4. __String getParent()__ ==file对象的父目录路径名字符串，如果此路径名没指定父目录，则返回null==
+     5. __String getPath()__ ==将此路径名转换为一个路径名字符串==
+     6. __long lastmodified()__ ==最后修改时间==
+     7. __long length()__ ==文件长度==
+     8. __String[] list()__ ==文件夹下的文件和目录名==
+     9. __File[] listFiles()__ 
+     10. __static File[] listRoots()__ ==返回根列表==
+  4. __判断：__
+     1. __boolean exists()__ ==判断文件是否存在==
+     2. __boolean isAbsolute()__ ==是否为绝对路径==
+     3. __boolean idDirectory()__ ==是否是一个目录==
+     4. __boolean isFile()__ ==是否是标准文件==
+     5. __boolean isHidden()__ ==是否是隐藏文件==
+
+### FileWriter
+
+* __构造方法：__
+  1. __FileWriter(String fileName)__
+  2. __FileWriter(String fileName,boolean append)：__ ==追加写入，默认false==
+* __成员方法：__ 
+  1. __void writer(String str)：__ ==写入一个字符串数据==
+  2. __void writer(String str, int index, int len)：__ ==写一个字符串中的一部分数据==
+  3. __void writer(int ch)：__ ==写一个字符数据，这里int的好处是既能写char类型，又能写char对应的int类型的值==
+  4. __void writer(char[] chs)：__ ==写一个字符数组数据==
+  5. __void writer(char[] chs,int index,int len)：__ ==写一个字符数组数据的一部分数据==
+  6. __void flush()：__ ==刷新缓冲区==
+  7. __void close()：__ ==先刷新缓冲区，再释放资源==
+
+```java
+public static void main(String[] args) throws IOException {
+  // 创建输出流
+  FileWriter fw = new FileWriter("/Users/monako/Documents/test.txt",true);
+  // 调用输出流写文件的方法
+  fw.write("IO流你好"); // 数据没有直接写到文件中,其实是写到了内存缓冲区
+  fw.write("\r\n"); // 换行
+  // 刷新缓冲区
+  fw.flush();
+  char[] ch = {'A','B','D'};
+  fw.write(ch,1,2);
+  // 先刷新缓冲区，再释放资源
+  fw.close();
+}
+```
+
+
+
+### FileReader
+
+* __构造方法：FileReader(String fileName)__ 
+* __成员方法：__
+  1. __int read()：__ ==读取一个字符==
+  2. __int read(char[] cbuf)：__ ==一次读取一个字符数组的数据==
+
+```java
+public static void main(String[] args) throws IOException {
+  // 读
+  FileReader fr = new FileReader("/Users/monako/Desktop/IO流.txt");
+  // int fread = fr.read();
+  // System.out.println((char)fread); // I
+  // int fread1 = fr.read();
+  // System.out.println((char)fread1); // O
+  // 如果读取数据返回值是-1时，就说明没有数据了
+  int ds;
+  while ( (ds=fr.read()) != -1 ){
+    System.out.print((char) ds);
+  }
+  fr.close();
+  FileReader fr = new FileReader("/Users/monako/Desktop/IO流.txt");
+  // char[] c = new char[3];
+  // int tss = frs.read(c);
+  // System.out.println(new String(c));
+  // int tss1 = frs.read(c);
+  // System.out.println(new String(c));
+  char[] c = new char[1024]; // 可以是1024及整数倍
+  int tss;
+  while ( (tss=frs.read(c)) != -1 ){
+    // System.out.println(new String(c,0,tss));
+    System.out.print(new String(c));
+  }
+  fr.close();
+}
+```
+
+### BufferedWriter & BufferedReader
+
+> __BufferedWriter：__ 将文本写入字符输出流，缓冲各个字符，从而提供单个字符、数组和字符串写入
+>
+> > __void newLine()：__ ==写一个换行符，由系统决定==
+>
+> __BufferedReader：__ 从字符输入流中读取文本，缓冲各个字符，从而实现字符数组和行的高效读取
+>
+> > __String readLine()：__ ==一次读取一行数据，不读取换行符==
+
+```java
+BufferedWriter bw = new BufferedWriter(new FileWriter("IO流.txt"));
+bw.write("HAHA");
+bw.close();
+BufferedReader br = new BufferedReader(new FileReader("/Users/monako/Desktop/IO流.txt"));
+char[] c = new char[1024]; // 可以是1024及整数倍
+int tss;
+while ( (tss=br.read(c)) != -1 ){
+  System.out.println(new String(c,0,tss));
+}
+br.close();
+```
+
+### InputStream
+
+==所有字节输入流的超类==
+
+### BufferedInputStream
+
+==InputStream的高效流==
+
+### OutputStream
+
+==所有字节输出流的超类==
+
+### BufferedOutputStream
+
+==OutputStream的高效流==
+
+* __二进制文件只能使用字节流进行复制，使用记事本读不懂的就是二进制文件__
+
+```java
+// 创建字节输入流对象
+BufferedInputStream bis = new BufferedInputStream(new FileInputStream("/Users/monako/Pictures/0860758AC97CCA84FC129DD8791753CB.jpg"));
+// 创建字节输出流对象
+BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("a.jpg"));
+// 一次读写一个字节数组
+int len; // 用于存储读到的字节数组
+byte[] bys = new byte[1024];
+while ((len=bis.read(bys))!=-1){
+    bos.write(bys,0,len);
+}
+// 释放资源
+bis.close();
+bos.close();
+```
+
+### 标准输入、输出流
+
+1. __public static final InputStream in__ 字节输入流，读取键盘录入数据
+2. __public static final PrintStream out__ 字节输出流
+
+### 打印流
+
+==不能输出字节，可以输出其它任意类型==
+
+1. __PrintStream__
+2. __PrintWriter__ 
+
+## 接口
+
+==接口不能创建对象，不能实例化==
+
+==类与接口的关系是实现关系，一个类实现一个接口，必须实现它的所有方法==
+
+* __接口成员的特点：__ 
+
+  1. __只能有抽象方法__ 
+
+  > 默认使用 public & abstract 修饰方法
+  >
+  > 只能使用 public & abstract 修饰方法
+  >
+  > 默认使用 public static final 修饰成员变量
+
+## 包
+
+| 修饰符    | 类   | 成员变量 | 成员方法 | 构造方法 |
+| --------- | ---- | -------- | -------- | -------- |
+| public    | Y    | Y        | Y        | Y        |
+| default   | Y    | Y        | Y        | Y        |
+| protected |      | Y        | Y        | Y        |
+| private   |      | Y        | Y        | Y        |
+| abstract  | Y    |          | Y        |          |
+| static    |      | Y        | Y        |          |
+| final     | Y    | Y        | Y        |          |
+
+> 常见规则：
+>
+> * 使用public来修饰类，一个java文件中只能有一个类，如果一个文件中有多个类，类名和文件名一样的类，必须使用public修饰，其他类不能使用public修饰
+> * 所有的成员变量都使用private修饰
+> * 所有的方法都使用public修饰
+> * 所以的构造方法都使用public修饰
+>   * 如果不想创建对象，使用private修饰
+
+* __权限修饰符__
+  1. public 当前类，相同包下不同的类，不同包下的类
+  2. default 当前类，相同包下不同的类 ==相同包下使用==
+  3. private 当前类 ==让子类对象使用==
+  4. protected 当前类，相同包下不同的类
+
+## 自动装箱&拆箱
+
+==JDK1.5特性==
+
+```java
+// 自动装箱
+// 相当于 Integer s = new Integer(20);
+Integer s = 20;
+Integer s1 = 30;
+Integer s2 = s + s1;
+// 自动拆箱
+// 相当于 int a = s.intValue();
+int a = s;
+```
+
+## 正则
+
+```java
+// boolean matches(String regex) 判断当前字符串是否匹配指定的正则表达式
+String qq = "1239418469";
+boolean flag = qq.matches("[1-9][0-9]{4,14}"); // true
+```
+
