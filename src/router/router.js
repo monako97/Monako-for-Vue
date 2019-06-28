@@ -7,6 +7,7 @@ import FriendsLink from "../components/friendsLink.vue";
 import TimeLine from "../components/timeLine.vue";
 // 创建路由对象
 var router = new VueRouter({
+    // mode: "history",
     routes:[
         // 配置路由规则
         { path: "/", redirect: "/home" },

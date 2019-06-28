@@ -49,22 +49,6 @@ export default {
           cons: 
             "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
           image: "https://i.loli.net/2019/06/13/5d0242cae595684066.png"
-        },
-        {
-          id: 5,
-          name: "MacOS使用Docker编译OpenWrt固件",
-          time: "Published on Oct 15, 2018 in",
-          cons:
-            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
-          image: "https://i.loli.net/2019/06/13/5d02468d7cbaf92589.jpg"
-        },
-        {
-          id: 6,
-          name: "MacOS使用Docker编译OpenWrt固件",
-          time: "Published on Oct 15, 2018 in",
-          cons:
-            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
-          image: "https://i.loli.net/2019/06/13/5d0247c149c6c98148.jpg"
         }
       ]
     };

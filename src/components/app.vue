@@ -30,7 +30,10 @@
     <transition>
       <router-view></router-view>
     </transition>
-    <button id="settop">100</button>
+    
+    <button id="settop">
+      cs
+    </button>
     <!-- blur -->
     <svg>
       <filter id="blur-effect">
@@ -63,7 +66,7 @@ export default {
     };
   },
   mounted() {
-    loadlive2d("live2d", "../public/live2d/aoba/model.json");
+    loadlive2d("live2d", "../assets/live2d/aoba/model.json");
     let _self = this;
     this.initHeight();
     window.addEventListener('scroll',this.scrollWheel,false);
@@ -75,12 +78,12 @@ export default {
             _self.$refs.headers.style.top = '0px';
         }
       }else{
-        if(event.deltaY>10){
+        if(event.deltaY > 10){
           if(_self.$refs.header.style.top != '-70px'||_self.$refs.headers.style.top != '-70px'){
             _self.$refs.header.style.top = '-70px';
             _self.$refs.headers.style.top = '-70px';
           }
-        }else if(event.deltaY<0){
+        }else if(event.deltaY < 0){
           if(_self.$refs.header.style.top != '0px'||_self.$refs.headers.style.top != '0px'){
             _self.$refs.header.style.top = '0px';
             _self.$refs.headers.style.top = '0px';
@@ -165,8 +168,8 @@ $height-color: rgba(233, 136, 124, 1);
   }
   #settop{
     position: fixed;
-    bottom: 5px;
-    right: 5px;
+    bottom: 385px;
+    right: 85px;
     background: transparent;
     color: $height-color;
     border: none;

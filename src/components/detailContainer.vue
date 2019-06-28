@@ -7,6 +7,7 @@
   </main>
 </template>
 <script>
+import hljs from 'highlight.js';
 import markdownItAnchor from 'markdown-it-anchor';
 import markdownItTocDoneRight from 'markdown-it-toc-done-right';
 import markdownItSup from 'markdown-it-sup';
@@ -18,11 +19,10 @@ export default {
     };
   },
   created(){
-    var readme = require('../public/md/Java学习笔记.md'),
-        hljs = require('highlight.js');
+    var readme = require('../assets/md/HTTP协议 & Servlet学习笔记.md');
         this.readme = require("markdown-it")({
         html: true,
-        linkify: true,
+        linkify: false,
         typographer: true,
         highlight: function(str, lang) {
           if (lang && hljs.getLanguage(lang)) {
@@ -94,15 +94,15 @@ export default {
       max-height: 60%;
       overflow-y: auto;
       position: fixed;
-      right: 0;
-      // margin: 90px auto 0;
-      border-bottom-left-radius: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 10px 10px #58526015;
+      left: 0;
+      border-bottom-right-radius: 8px;
+      border-top-right-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.11);
       padding: 10px; 
       transform: translateX(0);
       transition: all 0.5s ease-in;
-      border-left: 10px solid rgba(233, 136, 124, 1);
+      border-right: 10px solid rgba(233, 136, 124, 1);
       ol{
         li{
           list-style-type:none;
@@ -498,16 +498,21 @@ export default {
       font-weight: bold;
     }
   }
-  @media (max-width: 1110px) {
+  @media (max-width: 1450px) {
     article {
-      margin: 100px 55px;
+      margin: 100px auto;
       .table-of-contents{
-        transform: translateX(calc(100% - 10px));
+        transform: translateX(calc(-100% + 10px));
         transition: transform 0.3s ease-in;
       }
       .table-of-contents:hover{
         transform: translateX(0);
       }
+    }
+  }
+  @media (max-width: 1110px) {
+    article {
+      margin: 100px 55px;
     }
   }
   @media (max-width: 880px) {

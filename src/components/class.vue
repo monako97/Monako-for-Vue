@@ -2,13 +2,22 @@
     <main class="class-container">
         <article>
             <div> Continue Reading →</div>
+            <unlike :id="id" :count="count" :like="like"></unlike>
         </article>
     </main>
 </template>
 <script>
+import unlike from "./unlike.vue";
 export default {
     data: function(){
-        return {};
+        return {
+            id: 3,
+            count: 21,
+            like: true
+        };
+    },
+    components:{
+        unlike
     }
 }
 </script>
