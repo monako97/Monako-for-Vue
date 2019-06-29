@@ -19,7 +19,7 @@ export default {
     };
   },
   created(){
-    var readme = require('../assets/md/HTTP协议 & Servlet学习笔记.md');
+    var readme = require('../assets/md/JDBC学习笔记.md');
         this.readme = require("markdown-it")({
         html: true,
         linkify: false,
