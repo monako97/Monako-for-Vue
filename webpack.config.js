@@ -67,10 +67,11 @@ module.exports = {
                 }, // 移除注释
                 uglifyOptions: {
                     warnings: false,
-                    // ecma: 8,
+                    ecma: 8,
                     compress: {
                         unused: true,
-                        drop_debugger: true
+                        drop_debugger: true,
+                        drop_console: true
                     },
                     output: {
                         comments: false
