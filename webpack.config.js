@@ -21,7 +21,7 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'dist'),
         openPage: 'html/monako.html', //指定第一次打开的路径
         compress: true, //启用 gzip 压缩
-        host: '0.0.0.0',
+        host: 'localhost',
         port: 8099,
         inline: true,//设置为true，当源文件改变时会自动刷新页面
         hot: true //启用热替换模块

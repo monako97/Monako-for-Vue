@@ -19,7 +19,7 @@ export default {
     };
   },
   created(){
-    var readme = require('../assets/md/JDBC学习笔记.md');
+    var readme = require('../assets/md/事务&数据库连接池&DBUtils.md');
         this.readme = require("markdown-it")({
         html: true,
         linkify: false,

@@ -153,3 +153,100 @@ __按效率划分（从高到低）__
 
 ## 数据库连接池
 
+### DBCP
+
+> ==dbcp==、==logging==、==pool==
+
+#### 不使用配置文件
+
+```java
+public void testDBCP01(){
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    try{
+        // 1. 构建数据源对象
+        BasicDataSource basicDataSource = new BasicDataSource();
+        // 设置连的数据库，用户名，密码
+        basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        basicDataSource.setUrl("jdbc:mysql://localhost/bankdemo");
+        basicDataSource.setUsername("root");
+        basicDataSource.setPassword("54guoshuai");
+        // 2. 得到连接对象
+        connection = basicDataSource.getConnection();
+        String sql = "INSERT INTO account VALUES (null,?,?)";
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,"admin");
+        preparedStatement.setInt(2,1000);
+        preparedStatement.executeUpdate();
+    }catch (SQLException e){
+        e.printStackTrace();
+    }finally {
+        JDBCUtil.release(connection,preparedStatement);
+    }
+}
+```
+
+#### 使用配置文件
+
+```java
+public void testDBCP02(){
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    try{
+        // 1. 构建数据源对象
+        BasicDataSourceFactory basicDataSourceFactory = new BasicDataSourceFactory();
+        // 读取配置文件
+        Properties properties = new Properties();
+        InputStream inputStream = new FileInputStream("src//dbcpconfig.properties");
+        properties.load(inputStream);
+        DataSource dataSource = basicDataSourceFactory.createDataSource(properties);
+        // 2. 得到连接对象
+        connection = dataSource.getConnection();
+        String sql = "INSERT INTO account VALUES (null,?,?)";
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,"admin");
+        preparedStatement.setInt(2,1000);
+        preparedStatement.executeUpdate();
+    }catch (Exception e){
+        e.printStackTrace();
+    }finally {
+        JDBCUtil.release(connection,preparedStatement);
+    }
+}
+```
+
+### C3P0
+
+#### 不使用配置文件
+
+```java
+public void testC3P0(){
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    try{
+        // 1. 创建datasource
+        ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
+        // 3. 设置信息
+        comboPooledDataSource.setUser("root");
+        comboPooledDataSource.setJdbcUrl("jdbc:mysql://localhost/bankdemo");
+        comboPooledDataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
+        comboPooledDataSource.setPassword("54guoshuai");
+        // 2. 得到连接对象
+        connection = comboPooledDataSource.getConnection();
+        String sql = "INSERT INTO account VALUES (null,?,?)";
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,"admin");
+        preparedStatement.setInt(2,1000);
+        preparedStatement.executeUpdate();
+    }catch (Exception e){
+        e.printStackTrace();
+    }finally {
+        JDBCUtil.release(connection,preparedStatement);
+    }
+}
+```
+
+#### 使用配置文件
+
+
+
