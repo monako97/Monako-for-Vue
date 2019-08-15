@@ -2,7 +2,7 @@
   <transition-group appear tag="main" class="home-container">
     <article v-for="item in item" :key="item.id">
       <router-link tag="div" class="bgimg" 
-        :to="'/detail/'+item.id+'?bg='+item.image" 
+        :to="'/detail/'+item.name+'?bg='+item.image" 
         :style='"background-image: url("+item.image+");"'>
       </router-link>
       <p class="title">{{ item.name }}</p>
@@ -10,7 +10,7 @@
       <hr>
       <aside>{{ item.cons }}</aside>
       <router-link tag="div"
-        :to="'/detail/'+item.id+'?bg='+item.image" 
+        :to="'/detail/'+item.name+'?bg='+item.image" 
         class="btnReading">Continue Reading →</router-link>
     </article>
   </transition-group>
@@ -22,7 +22,7 @@ export default {
       item: [
         {
           id: 1,
-          name: "第一个java程序",
+          name: "Java学习笔记",
           time: "Published on Oct 15, 2018 in",
           cons: "阁下要来一杯提升醒脑的java吗？",
           image: "https://i.loli.net/2019/06/13/5d0234ce0f49d94264.jpg"
@@ -36,18 +36,23 @@ export default {
         },
         {
           id: 3,
-          name: "MacOS使用Docker编译OpenWrt固件",
+          name: "MYSQL学习笔记",
           time: "Published on Oct 15, 2018 in",
-          cons:
-            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
+          cons: "MYSQL学习笔记",
           image: "https://i.loli.net/2019/06/13/5d02473b9253252029.jpg"
         },
         {
           id: 4,
-          name: "MacOS使用Docker编译OpenWrt固件",
+          name: "HttpServletRequest和HttpServletResponse",
           time: "Published on Oct 15, 2018 in",
-          cons: 
-            "偶然间看到了一个新的 OpenWrt 控制台主题，手痒之下尝试自行编译看看",
+          cons: "HttpServletRequest和HttpServletResponse",
+          image: "https://i.loli.net/2019/06/13/5d0242cae595684066.png"
+        },
+        {
+          id: 5,
+          name: "事务&数据库连接池&DBUtils",
+          time: "Published on Oct 15, 2018 in",
+          cons: "事务&数据库连接池&DBUtils",
           image: "https://i.loli.net/2019/06/13/5d0242cae595684066.png"
         }
       ]

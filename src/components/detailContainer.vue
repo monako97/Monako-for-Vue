@@ -19,8 +19,8 @@ export default {
     };
   },
   created(){
-    var readme = require('../assets/md/事务&数据库连接池&DBUtils.md');
-        this.readme = require("markdown-it")({
+    let readme = require(`../assets/md/${this.$route.params.id}.md`);
+    this.readme = require("markdown-it")({
         html: true,
         linkify: false,
         typographer: true,
