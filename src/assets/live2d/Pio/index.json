@@ -18,7 +18,7 @@
 	"motions":{
 		"idle":[
 			{"file":"motions/Breath1.mtn"},
-			{"file":"motions/Breath2.mtn", "sound": "voice/400170060.mp3"},
+			{"file":"motions/Breath2.mtn"},
 			{"file":"motions/Breath3.mtn"},
 			{"file":"motions/Breath5.mtn"},
 			{"file":"motions/Breath7.mtn"},
@@ -42,7 +42,7 @@
 			{"file":"motions/Touch1.mtn"},
 			{"file":"motions/Touch2.mtn"},
 			{"file":"motions/Touch3.mtn"},
-			{"file":"motions/Touch4.mtn", "sound": "voice/400170060.mp3"},
+			{"file":"motions/Touch4.mtn"},
 			{"file":"motions/Touch5.mtn"},
 			{"file":"motions/Touch6.mtn", "sound": "voice/400170060.mp3"}
 		]

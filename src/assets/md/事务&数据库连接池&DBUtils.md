@@ -248,5 +248,230 @@ public void testC3P0(){
 
 #### 使用配置文件
 
+```java
+public void testC3P0(){
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    try{
+    		// 1. 创建datasource
+    		ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
+    		// 读取配置文件
+    		// 默认是xml的default-config分支
+    		// 2. 得到连接对象
+    		connection = comboPooledDataSource.getConnection();
+    		String sql = "INSERT INTO account VALUES (null,?,?)";
+    		preparedStatement = connection.prepareStatement(sql);
+    		preparedStatement.setString(1,"admin");
+    		preparedStatement.setInt(2,1000);
+    		preparedStatement.executeUpdate();
+    }catch (Exception e){
+    		e.printStackTrace();
+    }finally {
+  		  JDBCUtil.release(connection,preparedStatement);
+    }
+}
+```
 
+### DBUtils
+
+#### 增、删、改
+
+```java
+ComboPooledDataSource dataSource = new ComboPooledDataSource();
+// DBUtils只是简化了CRUD代码，但是连接的时候的创建及获取工作，不在考虑范围
+QueryRunner queryRunner = new QueryRunner(dataSource);
+// 增加
+queryRunner.update("INSERT INTO account VALUES (null,?,?)","MONAKO",1000);
+// 删除
+queryRunner.update("DELETE FROM account WHERE id = ?",3);
+// 更新
+queryRunner.update("UPDATE account SET money = ? where id = ?",520,19);
+```
+
+#### 查询
+
+```java
+// 查询单个对象
+Account account = queryRunner.query("SELECT * FROM account WHERE id = ?", new ResultSetHandler<Account>() {
+    @Override
+    public Account handle(ResultSet result) throws SQLException{
+        Account account = new Account();
+        while (result.next()){
+            String name = result.getString("name");
+            int money = result.getInt("money");
+            account.setName(name);
+            account.setMoney(money);
+        }
+        return account;
+    }
+},2);
+/* 或：
+	Account  account = queryRunner.query("SELECT * FROM account WHERE id = ?",new BeanHandler<Account>(Account.class),2); 
+*/
+System.out.println(account);
+// 查询多个对象
+List<Account> accountList = queryRunner.query("SELECT * FROM account ",new BeanListHandler<Account>(Account.class));
+for (int i = 0; i < accountList.size(); i++) {
+    System.out.println(accountList.get(i).getName()+" - "+accountList.get(i).getMoney());
+}
+```
+
+### ResultSetHandler 常用的实现类
+
+>   ArrayHandler ==查询到的单个数据封装成一个数组==
+>
+>   ArrayListHandler ==查询到的多个数据封装成一个集合，集合里面的元素是数组==
+>
+> ​	BeanHandler ==查询到的数据封装成一个对象==
+>
+> ​	BeanListHandler ==查询到的数据封装成一个List<对象>==
+>
+>   MapHandler ==查询到的单个数据封装成一个map==
+>
+>   MapListHandler ==查询到的多个数据封装成一个集合，集合里面的元素是map==
+>
+> ColumnListHandler
+>
+> KeyedHandler
+>
+> ScalarHandler
+
+### 元数据
+
+> 描述数据的数据 String sql，描述这份 sql 字符串的数据叫做元数据
+
++ __数据库元数据：__ DatabaseMetaData
++ __参数元数据：__ ParameterMetaData
++ __结果元数据：__ ResultSetMetaData
+
+#### 配合 C3P0 自定义封装 CRUD 工具类
+
+```java
+public class CommonCRUDUtil {
+    @Test
+    public void testUpdate(){
+        // update("INSERT INTO account VALUES (null,?,?)","Saber",1000);
+        // update("DELETE FROM account where id = ?",20);
+        // update("UPDATE account set money = ? where id = ?",520,2);
+        // 推荐
+        update02("UPDATE account set money = ? where id = ?",120,2,1,19);
+    }
+    /* 通用的增、删、改功能 ，以参数个数为准
+     * @param sql 需要操作的sql语句
+     * @param args 可变参数，有几个占位符，就写几个参数进去
+     * */
+    public void update(String sql,Object...args){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = JDBCUtil02.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
+            for (int i = 0; i < args.length; i++) {
+                // 因为不知道是森么类型的数据，所以都用setObject对待
+                preparedStatement.setObject(i+1, args[i]);
+            }
+
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            JDBCUtil02.release(connection,preparedStatement);
+        }
+    }
+    public void update02(String sql,Object...args){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = JDBCUtil02.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // 元数据，获取有几个占位符(?)
+            ParameterMetaData parameterMetaData = preparedStatement.getParameterMetaData();
+            int count = parameterMetaData.getParameterCount();
+            for (int i = 0; i < count; i++) {
+                // 因为不知道是森么类型的数据，所以都用setObject对待
+                preparedStatement.setObject(i+1, args[i]);
+            }
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            JDBCUtil02.release(connection,preparedStatement);
+        }
+    }
+    class A implements ResultSetHandler<Account>{
+        @Override
+        public Account handle(ResultSet resultSet) {
+            try {
+                Account account = new Account();
+                while (resultSet.next()){
+                    String name = resultSet.getString("name");
+                    int money = resultSet.getInt("money");
+                    account.setName(name);
+                    account.setMoney(money);
+                }
+                return account;
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    @Test
+    public void testQuery(){
+        // Account account = query("SELECT * FROM account where money = ?",new A(),520);
+        List<Account> account = query("SELECT * FROM account where money < ?", new ResultSetHandler<List<Account>>() {
+            @Override
+            public List<Account> handle(ResultSet resultSet) {
+                List<Account> listAccount = new ArrayList<Account>();
+                try{
+                    while (resultSet.next()){
+                        Account account1 = new Account();
+                        account1.setMoney(resultSet.getInt("money"));
+                        account1.setName(resultSet.getString("name"));
+                        listAccount.add(account1);
+                    }
+                    return listAccount;
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }, 520);
+        System.out.println(account.toString());
+    }
+
+    public <T> T query(String sql,ResultSetHandler<T> resultSetHandler,Object...args){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        T t = null;
+        try{
+            connection = JDBCUtil02.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // 元数据
+            // 获取有几个占位符(?)
+            ParameterMetaData parameterMetaData = preparedStatement.getParameterMetaData();
+            int count = parameterMetaData.getParameterCount();
+            for (int i = 0; i < count; i++) {
+                // 因为不知道是森么类型的数据，所以都用setObject对待
+                preparedStatement.setObject(i+1, args[i]);
+            }
+            // 执行查询工作，然后得到结果集
+            resultSet = preparedStatement.executeQuery();
+            // 吧结果集丢给调用者，让他去封装数据，返回封装数据
+            t = (T)resultSetHandler.handle(resultSet);
+            // 问题一：这里的数据获取，以及封装成上面的对象返回，不知道，因为调用的地方需要的数据不同
+            /*while (resultSet.next()){
+
+            }*/
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            JDBCUtil02.release(connection,resultSet,preparedStatement);
+        }
+        return t;
+    }
+}
+```
 

@@ -2,12 +2,11 @@
     <main class="class-container">
         <article>
             <div> Continue Reading →</div>
-            <unlike :id="id" :count="count" :like="like"></unlike>
+            <unlike :id="id" :count="count" :like="like"/>
         </article>
     </main>
 </template>
 <script>
-import unlike from "./unlike.vue";
 export default {
     data: function(){
         return {
@@ -17,7 +16,7 @@ export default {
         };
     },
     components:{
-        unlike
+        unlike: () => import(/* webpackChunkName: "unlike" */ './unlike'),
     }
 }
 </script>

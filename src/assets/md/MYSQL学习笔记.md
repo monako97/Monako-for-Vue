@@ -1,7 +1,83 @@
 [TOC]
 # MYSQL学习笔记
 
-* __MYSQL的SQL语句：__
+## Centos 7中安装mysql 8
+
+1. wget 下载源安装包
+
+   ```shell
+   wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+   ```
+
+2. 安装 yum repo 文件
+
+   ```shell
+   rpm -ivh mysql80-community-release-el7-3.noarch.rpm
+   ```
+
+3. 更新yum缓存
+
+   ```shell
+   yum clean all
+   yum makecache
+   ```
+
+4. 安装mysql服务器，当我们在使用yum安装mysql时，yum默认会从yum仓库中安装mysql最新的GA版本；
+
+   ```shell
+   -- 查看mysql yum仓库中mysql版本
+   yum repolist all | grep mysql
+   ```
+
+   ![](https://i.loli.net/2019/12/24/DlBQOy7ZtusG2Xb.png)
+
+   > 可以看到mysql8是可用的，其它是禁用的，我正好是需要安装mysql8，所以不用管了
+   >
+   > 如果想要安装其它版本可以修改：__yum-config-manager --enable mysql57-community__
+
+5. 安装mysql服务
+
+   ```shell
+   yum install mysql-community-server
+   ```
+
+   * 启动：systemctl start mysqld.service
+
+   * 停止：systemctl stop mysqld.service
+
+   * 重启：systemctl restart mysqld.service
+
+   * 查看服务状态：systemctl status mysqld.service
+
+   * 允许远程登录
+
+     ```sql
+     -- 创建新的远程用户
+     CREATE USER '用户名'@'%' IDENTIFIED BY '密码';
+     -- 授权给远程用户
+     GRANT ALL ON *.* TO '[用户名]'@'%'; 
+     -- ALL表示授予所有权限
+     -- *.*表示所有数据库中的所有表
+     -- %表示任意IP可以远程连接
+     ```
+
+6. Mysql8 重置root密码
+
+   ```sql
+   -- 查看默认密码
+   grep "A temporary password" /var/log/mysqld.log
+   -- 修改变量
+   set global validate_password.policy=0;
+   set global validate_password.length=4;
+   -- 退出后执行，配置Mysql安全策略
+   mysql_secure_installation
+   ```
+
+   
+
+## 基础操作
+
+* MYSQL的SQL语句：__
   1. __SQL：__ Structure Query Language结构化查询语句
   2. __DDL：__ 数据定义语言：定义数据库、数据表它们的结构：create==创建==、drop==删除==、alter==修改==
   3. __DML：__ 数据操作语言：主要用来操作数据：insert==插入==、update==修改==、delete==删除==
@@ -131,6 +207,7 @@ insert into 表名 values(值1,值2);
 -- 批量插入
 insert into 表名 values(值1,值2),(值1,值2),(值1,值2);
 -- 举个栗子
+INSERT INTO `数据库名`.`表`(`字段名`) VALUES ('值');
 insert into bloglist(
   title,sub_title,image
 ) 
@@ -340,9 +417,49 @@ select * from 表1 别1 right outer join 表2 别2 on 别1.主键=别2.主键;
 
 ## 分页查询
 
-关键字： ==limit==
+关键字： ==limit== ==offset==
 
 ```sql
 -- 起始索引为0
-select * from 表名 limit 页数索引,查询数量;
+select * from 表名 limit 页数索引 offset 查询数量;
 ```
+
+## Timestamp时区问题
+
+> time_zone 时间是system 即跟随系统
+>
+> jdbc:mysql://34.92.22.157/monako?serverTimezone=GMT%2B8
+
+__1、查看系统时区：__
+
+```shell
+date -R
+# Thu, 13 Feb 2020 23:50:12 +0000 默认是美国时区
+```
+
+__2、修改Linux系统时区：__
+
+```shell
+# 修改成上海时区
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+# 查看
+date -R
+# Thu, 13 Feb 2020 23:50:12 +0800
+```
+
+__3、重启数据库：__
+
+```shell
+systemctl restart mysqld.service
+# 查看mysql时区 变成了cst(中国时区)
+mysql> show variables like "%time_zone%";
++------------------+--------+
+| Variable_name    | Value  |
++------------------+--------+
+| system_time_zone | CST    |
+| time_zone        | SYSTEM |
++------------------+--------+
+2 rows in set (0.01 sec)
+mysql> 
+```
+

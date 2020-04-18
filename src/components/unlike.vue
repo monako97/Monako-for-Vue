@@ -1,7 +1,7 @@
 <template>
   <article class="like-box">
-    <div :class="isLike?'heart':'heart heartAnimation'" 
-         :rel="isLike?'unlike':'like'" 
+    <div :class="isLike?'heart':'heart heartAnimation'"
+         :rel="isLike?'unlike':'like'"
          :style="isLike?'background-position:left;':''"
          @click="unlike"></div>
     <div>{{ counts }}</div>
@@ -26,10 +26,10 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="scss">
 .like-box{
     .heart {
-        background: url(../assets/images/web_heart_animation.png);
+        background-image: url("../assets/images/web_heart_animation.png");
         background-position: left;
         background-repeat: no-repeat;
         height: 80px;
@@ -38,9 +38,6 @@ export default {
         position: absolute;
         left: -14px;
         background-size: 2900%;
-    }
-    .aaaaa{
-        width:200px;
     }
     .heart:hover,
     .heart:focus {
