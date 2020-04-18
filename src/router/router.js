@@ -1,23 +1,37 @@
 import VueRouter from "vue-router";
-// 导入对应的路由组件
-import HomeContainer from "../components/homeContainer.vue";
-import DetailContainer from "../components/detailContainer.vue";
-import ClassIfication from "../components/class.vue";
-import FriendsLink from "../components/friendsLink.vue";
-import TimeLine from "../components/timeLine.vue";
+// import store from "../store/store";
 // 创建路由对象
-var router = new VueRouter({
+let router = new VueRouter({
     // mode: "history",
     routes:[
-        // 配置路由规则
-        { path: "/", redirect: "/home" },
-        { path: "/home", component: HomeContainer },
-        { path: "/class", component: ClassIfication },
-        { path: "/friendsLink", component: FriendsLink },
-        { path: "/timeLine", component: TimeLine },
-        { path: "/detail/:id", component: DetailContainer }
+        {path: "/", redirect: "home"},
+        {path: "/home",name: "home",
+         component: () => import(/* webpackChunkName: "homeContainer" */ '../components/homeContainer'),
+         meta: {keepAlive: true}},
+        {path: "/class",name: "class",
+         component: () => import(/* webpackChunkName: "class" */ '../components/class'),
+         meta: {keepAlive: false}},
+        {path: "/friendsLink",name: "friendsLink",
+         component: () => import(/* webpackChunkName: "friendsLink" */ '../components/friendsLink'),
+         meta: {keepAlive: false}},
+        {path: "/timeLine",name: "timeLine",
+         component: () => import(/* webpackChunkName: "timeLine" */ '../components/timeLine'),
+         meta: {keepAlive: false}},
+        {path: "/detail/:id",name: "detail",
+         component: () => import(/* webpackChunkName: "detailContainer" */ '../components/detailContainer'),
+         meta: {keepAlive: false}}
     ],
     linkActiveClass: "router-link-active" // 默认的类 router-link-active
+});
+
+router.beforeEach((to, from, next) => {
+    // if (store.state.userInfo.token === null) {
+    //     if (to.path === '/login') next();
+    //     else next('/login');
+    // } else {
+    //     next();
+    // }
+    next();
 });
 // 把路由对象暴露出去
 export default router;
