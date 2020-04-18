@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="../../../../Library/Application Support/abnerworks.Typora/themes/base.user.css">
 <template>
   <main class="detail-container">
     <img ref="bg" class="bg-blur" :src="$route.query.bg" alt="">
